@@ -22,13 +22,19 @@
     
 </dependency>
 
+<!-- FlatLaf - Modern flat UI theme for Swing -->
+<dependency>
+    <groupId>com.formdev</groupId>
+    <artifactId>flatlaf</artifactId>
+    <version>3.2.5</version>
+</dependency>
 
-
-
-
-
-
-
+<!-- MigLayout - Constraint-based layout manager -->
+<dependency>
+    <groupId>com.miglayout</groupId>
+    <artifactId>miglayout-swing</artifactId>
+    <version>11.3</version>
+</dependency>
 
   </dependencies>
 </project>

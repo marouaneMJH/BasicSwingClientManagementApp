@@ -1,6 +1,6 @@
 DB_NAME='mydb'
 
-install:
+compile:
 	@echo "[!] Start compiling ..."
 	@mvn clean install
 	@echo "[+] End compiling"
