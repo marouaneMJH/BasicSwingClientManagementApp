@@ -7,7 +7,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
-import bo.Client;
 import bo.Produit;
 
 public class ProduitDAO {

@@ -26,8 +26,6 @@ public class ClientPanel extends JPanel {
 
     public ClientPanel() {
         this.clientController = new ClientController();
-        this.allClients = clientController.getAllClients();
-        this.filteredClients = allClients;
         initializeComponents();
         setupLayout();
         loadClientData();
@@ -49,13 +47,14 @@ public class ClientPanel extends JPanel {
 
             @Override
             public void onClear() {
-                filteredClients = allClients;
+                if (filteredClients != null) filteredClients = allClients;
                 updateTable();
             }
 
             @Override
             public void onRefresh() {
                 allClients = clientController.getAllClients();
+                if (allClients == null) allClients = List.of();
                 filteredClients = allClients;
                 updateTable();
             }
@@ -112,7 +111,20 @@ public class ClientPanel extends JPanel {
      * Load client data from controller.
      */
     private void loadClientData() {
-        updateTable();
+        try {
+            allClients = clientController.getAllClients();
+            if (allClients == null) {
+                allClients = List.of();
+            }
+            filteredClients = allClients;
+            updateTable();
+        } catch (Exception e) {
+            System.err.println("Error loading clients: " + e.getMessage());
+            allClients = List.of();
+            filteredClients = List.of();
+            updateTable();
+            showErrorMessage("Unable to load clients. Check database connection.");
+        }
     }
 
     /**
@@ -120,6 +132,10 @@ public class ClientPanel extends JPanel {
      */
     private void updateTable() {
         tableModel.setRowCount(0);
+        
+        if (filteredClients == null) {
+            filteredClients = List.of();
+        }
         
         for (ClientDTO client : filteredClients) {
             Object[] row = {
@@ -131,19 +147,35 @@ public class ClientPanel extends JPanel {
             tableModel.addRow(row);
         }
 
-        searchToolbar.setResultCount(filteredClients.size(), allClients.size());
+        int total = (allClients != null) ? allClients.size() : 0;
+        searchToolbar.setResultCount(filteredClients.size(), total);
     }
 
     /**
      * Perform search on clients.
      */
     private void performSearch(String query) {
-        if (query == null || query.isEmpty()) {
-            filteredClients = allClients;
-        } else {
-            filteredClients = clientController.searchClients(query);
+        try {
+            if (query == null || query.isEmpty()) {
+                filteredClients = allClients;
+            } else {
+                filteredClients = clientController.searchClients(query);
+                if (filteredClients == null) {
+                    filteredClients = List.of();
+                }
+            }
+            updateTable();
+        } catch (Exception e) {
+            System.err.println("Error searching clients: " + e.getMessage());
+            showErrorMessage("Search failed: " + e.getMessage());
         }
-        updateTable();
+    }
+
+    /**
+     * Show error dialog to user.
+     */
+    private void showErrorMessage(String message) {
+        JOptionPane.showMessageDialog(this, message, "Error", JOptionPane.ERROR_MESSAGE);
     }
 
     /**
