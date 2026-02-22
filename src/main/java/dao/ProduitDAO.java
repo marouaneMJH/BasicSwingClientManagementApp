@@ -17,7 +17,7 @@ List<Produit> liste=new ArrayList<Produit>();
 		try {
 		Session session=HibernateUtil.getSessionFactory().openSession();
 		tx=session.beginTransaction();
-		liste=session.createQuery("From Produit P where P.qtstock>0").list();
+		liste=session.createQuery("From Produit P where P.qtstock > 0").list();
 		tx.commit();
 		session.close();
 		return liste;

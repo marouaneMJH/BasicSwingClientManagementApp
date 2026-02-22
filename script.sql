@@ -1,4 +1,4 @@
-Create dabase mydb --Tables will be created by default while starting application (hibernate capability);
+Create database mydb --Tables will be created by default while starting application (hibernate capability);
 use mydb --dabase=mydb user=root, password=1234;
 insert into client(nom,capital,adresse) values('Mickel Stairs',10000,'USA'); 
 insert into client(nom,capital,adresse) values('Jean Walless',20000,'UK');

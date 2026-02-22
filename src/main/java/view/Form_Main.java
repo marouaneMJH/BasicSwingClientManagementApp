@@ -40,6 +40,10 @@ public class Form_Main extends JFrame {
 	 */
 	public Form_Main() {
 		setResizable(false);
+		setUndecorated(false);
+		setUndecorated(false);
+		setResizable(true);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 		setTitle("Gestion Commerciale");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 564, 300);
