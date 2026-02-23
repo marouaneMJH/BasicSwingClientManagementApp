@@ -2,9 +2,9 @@ package view.panels;
 
 import view.utils.UIThemeManager;
 import view.components.SearchToolbar;
-import view.dialogs.ClientFormDialog;
-import controller.ClientController;
-import dto.ClientDTO;
+import view.dialogs.ProduitFormDialog;
+import controller.ProduitController;
+import dto.ProduitDTO;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -13,23 +13,23 @@ import java.awt.*;
 import java.util.List;
 
 /**
- * Client management panel with search and table display.
- * Part of the Phase 1 UI enhancement with Stormy Morning styling.
+ * Product management panel with search and table display.
+ * Part of the Phase 2 UI enhancement with Stormy Morning styling.
  */
-public class ClientPanel extends JPanel {
+public class ProduitPanel extends JPanel {
 
     private SearchToolbar searchToolbar;
-    private JTable clientTable;
+    private JTable produitTable;
     private DefaultTableModel tableModel;
-    private ClientController clientController;
-    private List<ClientDTO> allClients;
-    private List<ClientDTO> filteredClients;
+    private ProduitController produitController;
+    private List<ProduitDTO> allProduits;
+    private List<ProduitDTO> filteredProduits;
 
-    public ClientPanel() {
-        this.clientController = new ClientController();
+    public ProduitPanel() {
+        this.produitController = new ProduitController();
         initializeComponents();
         setupLayout();
-        loadClientData();
+        loadProduitData();
     }
 
     /**
@@ -48,21 +48,21 @@ public class ClientPanel extends JPanel {
 
             @Override
             public void onClear() {
-                if (filteredClients != null) filteredClients = allClients;
+                if (filteredProduits != null) filteredProduits = allProduits;
                 updateTable();
             }
 
             @Override
             public void onRefresh() {
-                allClients = clientController.getAllClients();
-                if (allClients == null) allClients = List.of();
-                filteredClients = allClients;
+                allProduits = produitController.getAllProduits();
+                if (allProduits == null) allProduits = List.of();
+                filteredProduits = allProduits;
                 updateTable();
             }
         });
 
         // Create table
-        String[] columnNames = {"ID", "Name", "Capital", "Address"};
+        String[] columnNames = {"ID", "Name", "Price", "Stock"};
         tableModel = new DefaultTableModel(columnNames, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -70,24 +70,24 @@ public class ClientPanel extends JPanel {
             }
         };
 
-        clientTable = new JTable(tableModel);
-        clientTable.setBackground(Color.WHITE);
-        clientTable.setForeground(UIThemeManager.COLOR_TEXT);
-        clientTable.setSelectionBackground(UIThemeManager.COLOR_PRIMARY);
-        clientTable.setSelectionForeground(Color.WHITE);
-        clientTable.setRowHeight(25);
-        clientTable.getTableHeader().setBackground(UIThemeManager.COLOR_DARK_ACCENT);
-        clientTable.getTableHeader().setForeground(Color.WHITE);
-        clientTable.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 11));
+        produitTable = new JTable(tableModel);
+        produitTable.setBackground(Color.WHITE);
+        produitTable.setForeground(UIThemeManager.COLOR_TEXT);
+        produitTable.setSelectionBackground(UIThemeManager.COLOR_PRIMARY);
+        produitTable.setSelectionForeground(Color.WHITE);
+        produitTable.setRowHeight(25);
+        produitTable.getTableHeader().setBackground(UIThemeManager.COLOR_DARK_ACCENT);
+        produitTable.getTableHeader().setForeground(Color.WHITE);
+        produitTable.getTableHeader().setFont(new Font("Dialog", Font.BOLD, 11));
 
         // Column widths
-        clientTable.getColumnModel().getColumn(0).setPreferredWidth(40);  // ID
-        clientTable.getColumnModel().getColumn(1).setPreferredWidth(150); // Name
-        clientTable.getColumnModel().getColumn(2).setPreferredWidth(100); // Capital
-        clientTable.getColumnModel().getColumn(3).setPreferredWidth(200); // Address
+        produitTable.getColumnModel().getColumn(0).setPreferredWidth(40);  // ID
+        produitTable.getColumnModel().getColumn(1).setPreferredWidth(200); // Name
+        produitTable.getColumnModel().getColumn(2).setPreferredWidth(100); // Price
+        produitTable.getColumnModel().getColumn(3).setPreferredWidth(80);  // Stock
 
         // Scroll pane for table
-        JScrollPane scrollPane = new JScrollPane(clientTable);
+        JScrollPane scrollPane = new JScrollPane(produitTable);
         scrollPane.setBackground(Color.WHITE);
         scrollPane.getViewport().setBackground(Color.WHITE);
     }
@@ -104,7 +104,7 @@ public class ClientPanel extends JPanel {
 
         add(searchToolbar, "cell 0 0, growx");
 
-        JScrollPane scrollPane = new JScrollPane(clientTable);
+        JScrollPane scrollPane = new JScrollPane(produitTable);
         add(scrollPane, "cell 0 1, grow");
 
         // Button panel
@@ -140,22 +140,22 @@ public class ClientPanel extends JPanel {
     }
 
     /**
-     * Load client data from controller.
+     * Load produit data from controller.
      */
-    private void loadClientData() {
+    private void loadProduitData() {
         try {
-            allClients = clientController.getAllClients();
-            if (allClients == null) {
-                allClients = List.of();
+            allProduits = produitController.getAllProduits();
+            if (allProduits == null) {
+                allProduits = List.of();
             }
-            filteredClients = allClients;
+            filteredProduits = allProduits;
             updateTable();
         } catch (Exception e) {
-            System.err.println("Error loading clients: " + e.getMessage());
-            allClients = List.of();
-            filteredClients = List.of();
+            System.err.println("Error loading produits: " + e.getMessage());
+            allProduits = List.of();
+            filteredProduits = List.of();
             updateTable();
-            showErrorMessage("Unable to load clients. Check database connection.");
+            showErrorMessage("Unable to load products. Check database connection.");
         }
     }
 
@@ -165,40 +165,40 @@ public class ClientPanel extends JPanel {
     private void updateTable() {
         tableModel.setRowCount(0);
         
-        if (filteredClients == null) {
-            filteredClients = List.of();
+        if (filteredProduits == null) {
+            filteredProduits = List.of();
         }
         
-        for (ClientDTO client : filteredClients) {
+        for (ProduitDTO produit : filteredProduits) {
             Object[] row = {
-                client.getId(),
-                client.getNom(),
-                String.format("%.2f", client.getCapital()),
-                client.getAdresse()
+                produit.getId(),
+                produit.getLibelle(),
+                String.format("%.2f", produit.getPrix()),
+                produit.getQtstock()
             };
             tableModel.addRow(row);
         }
 
-        int total = (allClients != null) ? allClients.size() : 0;
-        searchToolbar.setResultCount(filteredClients.size(), total);
+        int total = (allProduits != null) ? allProduits.size() : 0;
+        searchToolbar.setResultCount(filteredProduits.size(), total);
     }
 
     /**
-     * Perform search on clients.
+     * Perform search on produits.
      */
     private void performSearch(String query) {
         try {
             if (query == null || query.isEmpty()) {
-                filteredClients = allClients;
+                filteredProduits = allProduits;
             } else {
-                filteredClients = clientController.searchClients(query);
-                if (filteredClients == null) {
-                    filteredClients = List.of();
+                filteredProduits = produitController.searchProduits(query);
+                if (filteredProduits == null) {
+                    filteredProduits = List.of();
                 }
             }
             updateTable();
         } catch (Exception e) {
-            System.err.println("Error searching clients: " + e.getMessage());
+            System.err.println("Error searching produits: " + e.getMessage());
             showErrorMessage("Search failed: " + e.getMessage());
         }
     }
@@ -211,20 +211,20 @@ public class ClientPanel extends JPanel {
     }
 
     /**
-     * Refresh client data from database.
+     * Refresh produit data from database.
      */
     public void refresh() {
-        allClients = clientController.getAllClients();
-        filteredClients = allClients;
+        allProduits = produitController.getAllProduits();
+        filteredProduits = allProduits;
         updateTable();
         searchToolbar.clearAll();
     }
 
     /**
-     * Open add client dialog.
+     * Open add product dialog.
      */
     private void openAddDialog() {
-        ClientFormDialog dialog = new ClientFormDialog((Frame) SwingUtilities.getWindowAncestor(this), null);
+        ProduitFormDialog dialog = new ProduitFormDialog((Frame) SwingUtilities.getWindowAncestor(this), null);
         dialog.setVisible(true);
         if (dialog.isSaved()) {
             refresh();
@@ -232,20 +232,20 @@ public class ClientPanel extends JPanel {
     }
 
     /**
-     * Open edit client dialog.
+     * Open edit product dialog.
      */
     private void openEditDialog() {
-        int selectedRow = clientTable.getSelectedRow();
+        int selectedRow = produitTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a client to edit", "Info", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a product to edit", "Info", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
         
-        int clientId = (int) tableModel.getValueAt(selectedRow, 0);
-        ClientDTO client = clientController.getClientDTO(clientId);
+        int produitId = (int) tableModel.getValueAt(selectedRow, 0);
+        ProduitDTO produit = produitController.getProduitDTO(produitId);
         
-        if (client != null) {
-            ClientFormDialog dialog = new ClientFormDialog((Frame) SwingUtilities.getWindowAncestor(this), client);
+        if (produit != null) {
+            ProduitFormDialog dialog = new ProduitFormDialog((Frame) SwingUtilities.getWindowAncestor(this), produit);
             dialog.setVisible(true);
             if (dialog.isSaved()) {
                 refresh();
@@ -254,24 +254,24 @@ public class ClientPanel extends JPanel {
     }
 
     /**
-     * Delete selected client.
+     * Delete selected product.
      */
     private void deleteSelected() {
-        int selectedRow = clientTable.getSelectedRow();
+        int selectedRow = produitTable.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a client to delete", "Info", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a product to delete", "Info", JOptionPane.INFORMATION_MESSAGE);
             return;
         }
 
-        int clientId = (int) tableModel.getValueAt(selectedRow, 0);
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this client?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
+        int produitId = (int) tableModel.getValueAt(selectedRow, 0);
+        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this product?", "Confirm Delete", JOptionPane.YES_NO_OPTION);
         
         if (confirm == JOptionPane.YES_OPTION) {
-            if (clientController.deleteClient(clientId)) {
-                JOptionPane.showMessageDialog(this, "Client deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+            if (produitController.deleteProduit(produitId)) {
+                JOptionPane.showMessageDialog(this, "Product deleted successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
                 refresh();
             } else {
-                JOptionPane.showMessageDialog(this, "Failed to delete client", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Failed to delete product", "Error", JOptionPane.ERROR_MESSAGE);
             }
         }
     }

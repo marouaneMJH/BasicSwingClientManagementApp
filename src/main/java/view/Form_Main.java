@@ -2,6 +2,8 @@ package view;
 
 import view.utils.UIThemeManager;
 import view.panels.ClientPanel;
+import view.panels.CommandePanel;
+import view.panels.ProduitPanel;
 import java.awt.EventQueue;
 import javax.swing.*;
 
@@ -51,19 +53,12 @@ public class Form_Main extends JFrame {
 		ClientPanel clientPanel = new ClientPanel();
 		tabbedPane.addTab("Clients", clientPanel);
 
-		// Add Command management tab (placeholder for now)
-		JPanel commandePanel = new JPanel();
-		commandePanel.add(new JLabel("Commandes Management (Coming Soon)"));
+		// Add Command (Order) management tab
+		CommandePanel commandePanel = new CommandePanel();
 		tabbedPane.addTab("Orders", commandePanel);
 
-		// Add Product management tab (placeholder for now)
-		JPanel produitPanel = new JPanel();
-		produitPanel.add(new JLabel("Products Management (Coming Soon)"));
+		// Add Product management tab
+		ProduitPanel produitPanel = new ProduitPanel();
 		tabbedPane.addTab("Products", produitPanel);
-
-		// Add exit option
-		JPanel exitPanel = new JPanel();
-		exitPanel.add(new JLabel("Application Controls"));
-		tabbedPane.addTab("Exit", exitPanel);
 	}
 }
