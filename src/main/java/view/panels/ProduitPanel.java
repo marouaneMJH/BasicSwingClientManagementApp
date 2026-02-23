@@ -1,8 +1,11 @@
 package view.panels;
 
 import view.utils.UIThemeManager;
+import view.utils.ExportUtil;
+import view.utils.ImportUtil;
 import view.components.SearchToolbar;
 import view.dialogs.ProduitFormDialog;
+import view.dialogs.CsvImportDialog;
 import controller.ProduitController;
 import dto.ProduitDTO;
 import net.miginfocom.swing.MigLayout;
@@ -10,6 +13,7 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.io.File;
 import java.util.List;
 
 /**
@@ -108,7 +112,7 @@ public class ProduitPanel extends JPanel {
         add(scrollPane, "cell 0 1, grow");
 
         // Button panel
-        JPanel buttonPanel = new JPanel(new MigLayout("insets 0, gap 10", "push[][][][] push", ""));
+        JPanel buttonPanel = new JPanel(new MigLayout("insets 0, gap 10", "push[][][][][][]push", ""));
         buttonPanel.setBackground(UIThemeManager.COLOR_BACKGROUND);
 
         JButton addButton = new JButton("Add");
@@ -131,10 +135,22 @@ public class ProduitPanel extends JPanel {
         refreshButton.setForeground(Color.WHITE);
         refreshButton.addActionListener(e -> refresh());
 
+        JButton exportButton = new JButton("Export");
+        exportButton.setBackground(UIThemeManager.COLOR_PRIMARY);
+        exportButton.setForeground(Color.WHITE);
+        exportButton.addActionListener(e -> exportData());
+
+        JButton importButton = new JButton("Import");
+        importButton.setBackground(UIThemeManager.COLOR_SUCCESS);
+        importButton.setForeground(Color.WHITE);
+        importButton.addActionListener(e -> importData());
+
         buttonPanel.add(addButton);
         buttonPanel.add(editButton);
         buttonPanel.add(deleteButton);
         buttonPanel.add(refreshButton);
+        buttonPanel.add(exportButton);
+        buttonPanel.add(importButton);
 
         add(buttonPanel, "cell 0 2, growx");
     }
@@ -273,6 +289,52 @@ public class ProduitPanel extends JPanel {
             } else {
                 JOptionPane.showMessageDialog(this, "Failed to delete product", "Error", JOptionPane.ERROR_MESSAGE);
             }
+        }
+    }
+
+    /**
+     * Export produit data to CSV file.
+     */
+    private void exportData() {
+        File file = ExportUtil.showSaveDialog(this, "products_export_" + System.currentTimeMillis());
+        if (file != null) {
+            if (ExportUtil.exportProductsToCSV(allProduits, file)) {
+                JOptionPane.showMessageDialog(this, "Data exported successfully to:\n" + file.getAbsolutePath(), 
+                    "Export Success", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Failed to export data", "Export Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+
+    /**
+     * Import product data from CSV file.
+     */
+    private void importData() {
+        CsvImportDialog dialog = new CsvImportDialog(
+            (Frame) SwingUtilities.getWindowAncestor(this), 
+            CsvImportDialog.ImportType.PRODUCTS
+        );
+        dialog.setVisible(true);
+        
+        if (dialog.isImportConfirmed()) {
+            java.util.List<dto.ProduitDTO> importedProducts = dialog.getImportedProducts();
+            int successCount = 0;
+            int failCount = 0;
+            
+            for (dto.ProduitDTO produit : importedProducts) {
+                try {
+                    produitController.ajouterProduit(produit);
+                    successCount++;
+                } catch (Exception e) {
+                    failCount++;
+                    System.err.println("Failed to import product: " + e.getMessage());
+                }
+            }
+            
+            String message = String.format("Import completed!\nSuccessful: %d\nFailed: %d", successCount, failCount);
+            JOptionPane.showMessageDialog(this, message, "Import Result", JOptionPane.INFORMATION_MESSAGE);
+            refresh();
         }
     }
 }

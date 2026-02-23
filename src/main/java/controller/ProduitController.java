@@ -9,6 +9,11 @@ import service.ProduitService;
 
 public class ProduitController {
     
+    public void ajouterProduit(ProduitDTO produitDTO) {
+        ProduitService produitservice = new ProduitService();
+        produitservice.create(produitDTO);
+    }
+
     public List<ProduitDTO> getAllProduit() {
         ProduitService produitservice = new ProduitService();
         return produitservice.retreive();

@@ -106,4 +106,13 @@ public class ProduitService implements ProduitServiceInterface{
 		}
 		return false;
 	}
+
+	/**
+	 * Create a new product from DTO.
+	 */
+	public void create(ProduitDTO produitDTO) {
+		ProduitDAO dao = new ProduitDAO();
+		Produit produit = toProduit(produitDTO);
+		dao.create(produit);
+	}
 }

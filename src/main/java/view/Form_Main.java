@@ -1,6 +1,7 @@
 package view;
 
 import view.utils.UIThemeManager;
+import view.panels.DashboardPanel;
 import view.panels.ClientPanel;
 import view.panels.CommandePanel;
 import view.panels.ProduitPanel;
@@ -48,6 +49,10 @@ public class Form_Main extends JFrame {
 		// Create tabbed pane
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		setContentPane(tabbedPane);
+
+		// Add Dashboard tab (first/home tab)
+		DashboardPanel dashboardPanel = new DashboardPanel();
+		tabbedPane.addTab("Dashboard", dashboardPanel);
 
 		// Add Client management tab
 		ClientPanel clientPanel = new ClientPanel();

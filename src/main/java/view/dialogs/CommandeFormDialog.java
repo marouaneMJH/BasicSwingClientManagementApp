@@ -33,9 +33,8 @@ public class CommandeFormDialog extends JDialog {
 
     private void initializeUI() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setSize(400, 250);
         setLocationRelativeTo(getParent());
-        setResizable(false);
+        setResizable(true);
 
         JPanel contentPane = new JPanel(new MigLayout("insets 15, gap 10", "[label 100][fill]", "[]10"));
         

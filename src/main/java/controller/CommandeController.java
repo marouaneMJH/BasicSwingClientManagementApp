@@ -12,6 +12,10 @@ import service.CommandeService;
 
 public class CommandeController {
 
+    public void ajouterCommande(CommandeDTO commandeDTO) {
+        new CommandeService().save(commandeDTO);
+    }
+
     public CommandeDTO createCommande() {
         return CommandeService.createCommandDTO();
     }
