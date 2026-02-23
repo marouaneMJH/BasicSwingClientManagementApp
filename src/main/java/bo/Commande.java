@@ -1,6 +1,7 @@
 package bo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -22,7 +23,6 @@ private int idcmd;
 
 private Date datecmd;
 
-@Transient
 private float total;
 
 @ManyToOne
@@ -30,7 +30,7 @@ private float total;
 private Client client;
 
 @OneToMany(mappedBy = "commande")
-private List<Ligne_Commande> lignes;
+private List<Ligne_Commande> lignes = new ArrayList<>();
 
 public int getIdcmd() {
 	return idcmd;

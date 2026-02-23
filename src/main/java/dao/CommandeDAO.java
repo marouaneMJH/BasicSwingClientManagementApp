@@ -16,10 +16,11 @@ public void create(Commande commande) {
 	Session session=HibernateUtil.getSessionFactory().openSession();
 	tx=session.beginTransaction();
 	session.save(commande);
-	for(Ligne_Commande l:commande.getLignes()) {
-		l.setCommande(commande);
-		session.saveOrUpdate(l);
-		
+	if (commande.getLignes() != null) {
+		for(Ligne_Commande l:commande.getLignes()) {
+			l.setCommande(commande);
+			session.saveOrUpdate(l);
+		}
 	}
 	
 	tx.commit();
