@@ -51,4 +51,68 @@ public class ProduitService implements ProduitServiceInterface{
 		}
 		
 	}
+
+	/**
+	 * Get all products as DTOs.
+	 */
+	public List<ProduitDTO> getAllProduits() {
+		ProduitDAO dao = new ProduitDAO();
+		List<Produit> produits = dao.getAllProduits();
+		if (produits == null) {
+			produits = List.of();
+		}
+		return produits.stream()
+			.map(this::fromProduit)
+			.collect(Collectors.toList());
+	}
+
+	/**
+	 * Search products by name (libelle).
+	 */
+	public List<ProduitDTO> searchProduits(String searchTerm) {
+		if (searchTerm == null || searchTerm.trim().isEmpty()) {
+			return getAllProduits();
+		}
+		ProduitDAO dao = new ProduitDAO();
+		List<Produit> produits = dao.search(searchTerm);
+		if (produits == null) {
+			produits = List.of();
+		}
+		return produits.stream()
+			.map(this::fromProduit)
+			.collect(Collectors.toList());
+	}
+
+	/**
+	 * Get product by ID.
+	 */
+	public ProduitDTO getProduitDTO(int id) {
+		ProduitDAO dao = new ProduitDAO();
+		Produit produit = dao.findById(id);
+		if (produit != null) {
+			return this.fromProduit(produit);
+		}
+		return null;
+	}
+
+	/**
+	 * Delete product.
+	 */
+	public boolean delete(int id) {
+		ProduitDAO dao = new ProduitDAO();
+		Produit produit = dao.findById(id);
+		if (produit != null) {
+			return dao.delete(produit);
+		}
+		return false;
+	}
+
+	/**
+	 * Create a new product from DTO.
+	 */
+	public void create(ProduitDTO produitDTO) {
+		ProduitDAO dao = new ProduitDAO();
+		Produit produit = toProduit(produitDTO);
+		dao.create(produit);
+	}
 }

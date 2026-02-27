@@ -1,23 +1,21 @@
 package view;
 
+import view.utils.UIThemeManager;
+import view.panels.DashboardPanel;
+import view.panels.ClientPanel;
+import view.panels.CommandePanel;
+import view.panels.ProduitPanel;
 import java.awt.EventQueue;
+import javax.swing.*;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JMenuBar;
-
+/**
+ * Main application window with tabbed interface.
+ * Phase 1 UI Enhancement with Stormy Morning styling and search/filter capabilities.
+ */
 public class Form_Main extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
+	private JTabbedPane tabbedPane;
 
 	/**
 	 * Launch the application.
@@ -26,6 +24,9 @@ public class Form_Main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					// Initialize FlatLaf theme
+					UIThemeManager.initializeTheme();
+					
 					Form_Main frame = new Form_Main();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -36,72 +37,33 @@ public class Form_Main extends JFrame {
 	}
 
 	/**
-	 * Create the frame.
+	 * Create the main application frame.
 	 */
 	public Form_Main() {
-		setResizable(false);
-		setUndecorated(false);
-		setUndecorated(false);
-		setResizable(true);
-		setExtendedState(JFrame.MAXIMIZED_BOTH);
-		setTitle("Gestion Commerciale");
+		setTitle("Gestion Commerciale - Commercial Management System");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 564, 300);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setBounds(100, 100, 1200, 700);
+		setLocationRelativeTo(null);
+		setExtendedState(JFrame.MAXIMIZED_BOTH);
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		JPanel panel = new JPanel();
-		panel.setBounds(29, 50, 511, 105);
-		contentPane.add(panel);
-		panel.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("Ce projet est réalisé dans le cadre de la formation assurée au cycle d'ingénieur ILISI. ");
-		lblNewLabel.setBounds(23, 20, 478, 13);
-		panel.add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("Module JEE/ Framework Hibernate.");
-		lblNewLabel_1.setBounds(23, 44, 309, 13);
-		panel.add(lblNewLabel_1);
-		
-		JLabel lblNewLabel_2 = new JLabel("réalisé et enseigné par Pr. Omar EL BEGGAR.");
-		lblNewLabel_2.setBounds(23, 67, 374, 13);
-		panel.add(lblNewLabel_2);
-		
-		JMenuBar menuBar = new JMenuBar();
-		menuBar.setBounds(0, 0, 144, 22);
-		contentPane.add(menuBar);
-		
-		JMenu mnNewMenu = new JMenu("Gestion Commerciale >");
-		menuBar.add(mnNewMenu);
-		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Gestion Client");
-		mntmNewMenuItem.setSelected(true);
-		mntmNewMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				new Form_Client().setVisible(true);
-			}
-		});
-		mnNewMenu.add(mntmNewMenuItem);
-		
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Gestion Commande");
-		mntmNewMenuItem_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			new Form_Commande().setVisible(true);	
-				
-			
-			}
-		});
-		mnNewMenu.add(mntmNewMenuItem_1);
-		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Fermer");
-		mnNewMenu.add(mntmNewMenuItem_3);
-		mntmNewMenuItem_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.exit(1);
-			}
-		});
+		// Create tabbed pane
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		setContentPane(tabbedPane);
+
+		// Add Dashboard tab (first/home tab)
+		DashboardPanel dashboardPanel = new DashboardPanel();
+		tabbedPane.addTab("Dashboard", dashboardPanel);
+
+		// Add Client management tab
+		ClientPanel clientPanel = new ClientPanel();
+		tabbedPane.addTab("Clients", clientPanel);
+
+		// Add Command (Order) management tab
+		CommandePanel commandePanel = new CommandePanel();
+		tabbedPane.addTab("Orders", commandePanel);
+
+		// Add Product management tab
+		ProduitPanel produitPanel = new ProduitPanel();
+		tabbedPane.addTab("Products", produitPanel);
 	}
 }

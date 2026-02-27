@@ -2,6 +2,7 @@ package service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import bo.Client;
 import dao.ClientDAO;
@@ -14,6 +15,31 @@ public class ClientService implements ClientServiceInterface {
 	public List<ClientDTO> retreive() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	/**
+	 * Get all clients as DTOs.
+	 */
+	public List<ClientDTO> getAllClients() {
+		ClientDAO dao = new ClientDAO();
+		List<Client> clients = dao.getAllClients();
+		return clients.stream()
+			.map(this::fromClient)
+			.collect(Collectors.toList());
+	}
+
+	/**
+	 * Search clients by name or address.
+	 */
+	public List<ClientDTO> searchClients(String searchTerm) {
+		if (searchTerm == null || searchTerm.trim().isEmpty()) {
+			return getAllClients();
+		}
+		ClientDAO dao = new ClientDAO();
+		List<Client> clients = dao.search(searchTerm);
+		return clients.stream()
+			.map(this::fromClient)
+			.collect(Collectors.toList());
 	}
 
 	@Override
