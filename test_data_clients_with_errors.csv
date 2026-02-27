@@ -1,9 +1,0 @@
-Name,Capital,Address
-Valid Company,50000.00,123 Main Street
-Missing Capital,,456 Oak Avenue
-Invalid Capital,ABC,789 Pine Road
-Missing Address,75000.00,
-Valid Company 2,125000.50,321 Elm Street
-Negative Capital,-5000,654 Maple Drive
-Empty Row,,,
-Another Valid,95000.00,987 Cedar Lane

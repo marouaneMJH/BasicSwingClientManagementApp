@@ -62,9 +62,9 @@ public class DashboardPanel extends JPanel {
         totalClientsLabel = createStatLabel("0");
         totalOrdersLabel = createStatLabel("0");
         totalProductsLabel = createStatLabel("0");
-        totalRevenueLabel = createStatLabel("$0.00");
+        totalRevenueLabel = createStatLabel("MAD0.00");
         lowStockLabel = createStatLabel("0");
-        avgOrderValueLabel = createStatLabel("$0.00");
+        avgOrderValueLabel = createStatLabel("MAD0.00");
 
         // Initialize segment panels
         clientSegmentPanel = new JPanel(new MigLayout("fill, insets 10", "[grow]", "[]"));
@@ -242,9 +242,9 @@ public class DashboardPanel extends JPanel {
         long midValue = clients.stream().filter(c -> c.getCapital() >= 10000 && c.getCapital() < 50000).count();
         long lowValue = clients.stream().filter(c -> c.getCapital() < 10000).count();
 
-        clientSegmentPanel.add(createSegmentBar("High Value (≥$50K)", highValue, clients.size(), UIThemeManager.COLOR_SUCCESS), "growx, wrap");
-        clientSegmentPanel.add(createSegmentBar("Mid Value ($10K-$50K)", midValue, clients.size(), UIThemeManager.COLOR_PRIMARY), "growx, wrap");
-        clientSegmentPanel.add(createSegmentBar("Low Value (<$10K)", lowValue, clients.size(), UIThemeManager.COLOR_WARNING), "growx, wrap");
+        clientSegmentPanel.add(createSegmentBar("High Value (≥MAD50K)", highValue, clients.size(), UIThemeManager.COLOR_SUCCESS), "growx, wrap");
+        clientSegmentPanel.add(createSegmentBar("Mid Value (MAD10K-MAD50K)", midValue, clients.size(), UIThemeManager.COLOR_PRIMARY), "growx, wrap");
+        clientSegmentPanel.add(createSegmentBar("Low Value (<MAD10K)", lowValue, clients.size(), UIThemeManager.COLOR_WARNING), "growx, wrap");
 
         // Summary
         JLabel summaryLabel = new JLabel(String.format("Total: %d clients", clients.size()));

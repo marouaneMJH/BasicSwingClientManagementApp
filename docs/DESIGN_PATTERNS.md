@@ -617,7 +617,7 @@ validateAndImport() {       ← Template method (fixed)
 ```java
 // GLOBAL FORMATTING
 private static final NumberFormat currencyFormat = 
-    NumberFormat.getCurrencyInstance(Locale.US);  // $
+    NumberFormat.getCurrencyInstance(Locale.US);  // MAD
 private static final NumberFormat percentFormat = 
     NumberFormat.getPercentInstance();             // %
 private static final DecimalFormat decimalFormat = 
@@ -626,7 +626,7 @@ private static final DecimalFormat decimalFormat =
 // USAGE IN DASHBOARD
 String formattedRevenue = currencyFormat.format(totalRevenue);
     // Input: 45678.50
-    // Output: "$45,678.50"
+    // Output: "MAD45,678.50"
 
 String formattedPercent = percentFormat.format(highValuePercent);
     // Input: 0.25

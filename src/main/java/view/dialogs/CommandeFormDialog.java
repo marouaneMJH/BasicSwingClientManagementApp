@@ -27,7 +27,7 @@ public class CommandeFormDialog extends JDialog {
     
     private final JSpinner dateSpinner = new JSpinner(new SpinnerDateModel());
     private final JComboBox<ClientDTO> clientCombo = new JComboBox<>();
-    private final JLabel totalLabel = new JLabel("$0.00");
+    private final JLabel totalLabel = new JLabel("MAD0.00");
     private final JTable lineItemsTable;
     private final DefaultTableModel lineItemsModel;
     private final JButton saveButton = new JButton("Save");
@@ -278,16 +278,16 @@ public class CommandeFormDialog extends JDialog {
         for (LineItem item : orderItems) {
             Object[] row = {
                 item.product.getLibelle(),
-                String.format("$%.2f", item.product.getPrix()),
+                String.format("MAD%.2f", item.product.getPrix()),
                 item.product.getQtstock(),
                 item.quantity,
-                String.format("$%.2f", item.subtotal)
+                String.format("MAD%.2f", item.subtotal)
             };
             lineItemsModel.addRow(row);
             total += item.subtotal;
         }
         
-        totalLabel.setText(String.format("$%.2f", total));
+        totalLabel.setText(String.format("MAD%.2f", total));
     }
 
     private void populateFields() {
